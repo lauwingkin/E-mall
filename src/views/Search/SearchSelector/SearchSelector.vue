@@ -20,7 +20,7 @@
           <li v-for="(attrValue,index) in attrs.attrValueList" :key="index">
             <a>{{attrValue}}</a>
           </li>
- 
+
         </ul>
       </div>
       <div class="fl text"></div>
