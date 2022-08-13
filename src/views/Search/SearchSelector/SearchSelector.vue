@@ -3,8 +3,11 @@
     <div class="type-wrap logo">
       <div class="fl key brand">品牌</div>
       <div class="value logos">
+        <!-- 品牌位置 -->
         <ul class="logo-list">
-          <li v-for="(trademark,index) in trademarkList" :key='trademark.tmId'>{{trademark.tmName}}</li>
+          <li v-for="(trademark,index) in trademarkList" :key='trademark.tmId' @click="tradeMarkHandler(trademark)">
+          {{trademark.tmName}}
+          </li>
           
         </ul>
       </div>
@@ -12,12 +15,15 @@
         <a href="javascript:void(0);" class="sui-btn">多选</a>
         <a href="javascript:void(0);">更多</a>
       </div>
-    </div>
+    </div> 
+    <!-- 属性位置 -->
     <div class="type-wrap" v-for="(attrs,index) in attrsList" :key="attrs.attrId">
+    <!-- 属性名 -->
       <div class="fl key">{{attrs.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue,index) in attrs.attrValueList" :key="index">
+          <!-- 属性值 -->
+          <li v-for="(attrValue,index) in attrs.attrValueList" :key="index" @click="attrInfo(attrs,attrValue)">
             <a>{{attrValue}}</a>
           </li>
 
@@ -36,6 +42,19 @@ import { mapGetters } from 'VueX'
     computed:{
       ...mapGetters(['trademarkList','attrsList'])
 
+    },
+    methods:{
+      tradeMarkHandler(trademark){
+        //触发父组件
+        this.$emit('trademarkInfo',trademark)   //把点击的品牌信息传到父组件，并触发
+       
+      },
+      attrInfo(attrs,attrValue){
+        //触发父组件
+        this.$emit('attrInfo',attrs,attrValue)   //把点击的两个值传到父组件，并触发
+
+      }
+  
     }
   }
 </script>

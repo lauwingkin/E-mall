@@ -14,11 +14,21 @@
             <li class="with-x" v-if="searchParams.categoryName">
               {{searchParams.categoryName}}<i @click="removeCategoryName">×</i>
             </li>
+            <li class="with-x" v-if="searchParams.keyword">
+              {{searchParams.keyword}}<i @click="removeKeyword">×</i>
+            </li>
+             <li class="with-x" v-if="searchParams.trademark">
+              {{searchParams.trademark.split(":")[1]}}<i @click="removeTrademark">×</i>
+            </li>
+              <li class="with-x" v-for="(attrValue,index) in searchParams.props" :key="index">
+              {{attrValue.split(":")[1]}}<i @click="removeAttr(index)">×</i>  
+              <!-- 遍历显示面包屑 -->
+            </li> 
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo"  @attrInfo="attrInfo"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -167,26 +177,79 @@ export default {
     //写在这可以重复调用发送
     getData() {
       this.$store.dispatch("getSearchList", this.searchParams);
+      console.log("获取数据");
     },
     //删除分类名称
-    removeCategoryName() {
-      this.searchParams.categoryName = "";
-      this.searchParams.category1Id = "";
-      this.searchParams.category2Id = "";
-      this.searchParams.category3Id = "";
-      this.getData();
+    removeCategoryName(){
+      console.log("分类名删除");
+      this.searchParams.categoryName = undefined;  //用undefined（不传），不用空字符串（传空字符串），可以减轻服务器压力
+      this.searchParams.category1Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined;
+      this.getData();  //重新获取数据
+
+      if(this.$route.params){
+          this.$router.push({name:'search',params:this.$route.params})//地址栏同步,路由跳转
+      } 
     },
+    //关键字面包屑删除
+    removeKeyword(){
+      console.log("关键字删除");
+      // this.searchParams.categoryName = undefined;  //用undefined（不传），不用空字符串（传空字符串），可以减轻服务器压力
+      // this.searchParams.category1Id = undefined;
+      // this.searchParams.category2Id = undefined;
+      // this.searchParams.category3Id = undefined;
+      this.searchParams.keyword = undefined;
+      this.getData();  //重新获取数据
+ 
+      // 通知header清除关键字
+      this.$bus.$emit('clear')
+
+      if(this.$route.query){
+          this.$router.push({name:'search',query:this.$route.query})//地址栏同步,路由跳转
+      } 
+    },
+    trademarkInfo(trademark){ 
+      //整理参数
+      this.searchParams.trademark=`${trademark.tmId}:${trademark.tmName}`
+      this.getData();  
+    },
+    removeTrademark(){
+      this.searchParams.trademark='';
+           this.getData();  //重新获取数据
+
+    },
+    
+    attrInfo(attrs,attrValue){
+      //整理参数
+      let props=`${attrs.attrId}:${attrValue}:${attrs.attrName}`; //整理成数组
+      if(this.searchParams.props.indexOf(props)==-1){       //数组去重判断
+        this.searchParams.props.push(props);   //添加进参数数组中
+      }
+      this.getData();    
+    },
+    removeTrademark(){
+      this.searchParams.trademark='';
+           this.getData();  //重新获取数据
+
+    },
+    removeAttr(index){
+      this.searchParams.props.splice(index,1);
+           this.getData();  //重新获取数据
+
+    }
   },
-  beforeMount() {
+  beforeMount() {  
     //合并参数
     Object.assign(this.searchParams, this.$route.query, this.$route.params);
   },
   watch: {
-    $route() {
+    $route(){
             //每次请求完毕后，要把分类id信息重置
-      this.searchParams.category1Id = "";
-      this.searchParams.category2Id = "";
-      this.searchParams.category3Id = "";
+      this.searchParams.category1Id = undefined;  //减轻服务器压力
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined;
+      console.log("路由发生变化");
       //当路由发生变化
       Object.assign(this.searchParams, this.$route.query,this.$route.params); //发请求前更新数据
       this.getData();

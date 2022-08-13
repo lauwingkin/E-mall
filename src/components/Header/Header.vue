@@ -81,10 +81,15 @@ export default {
 
     
   },
+  mounted(){
+    this.$bus.$on('clear',()=>{
+      this.keyword="";   //清空输入框
+    })
+  }
 };
 
 </script>
-
+ 
 <style scoped lang="less">
 .header {
   & > .top {
