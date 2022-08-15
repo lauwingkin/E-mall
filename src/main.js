@@ -6,8 +6,13 @@ import store from '@/store'
 
 //注册全局组件
 import TypeNav from '@/components/TypeNav/TypeNav.vue'
+
+import Pagination from '@/components/Pagination'
+
 //第一个参数，全局组件名字（这里直接读取了name值），第二个参数，哪个一个组件
 Vue.component(TypeNav.name,TypeNav);
+Vue.component(Pagination.name,Pagination);
+
 
 //测试用
 // import {reqCategoryList} from '@/api/index.js'

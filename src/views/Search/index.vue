@@ -35,28 +35,17 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
-                </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
-                </li>
+                <li :class="{active:isOne}" @click="changeOrder(1)">
+                <!-- 简写版本 -->
+                  <a href="#">综合<span v-show="isOne" class="iconfont" :class="{'icon-long-arrow-down':isDesc,'icon-long-arrow-up':isAsc}"></span></a>
+                </li>  
+                <li :class="{active:searchParams.order.indexOf('2')!=-1}" @click="changeOrder(2)" >
+                  <a href="#">价格<span v-show="searchParams.order.indexOf('2')!=-1" class="iconfont" :class="{'icon-long-arrow-down':isDesc,'icon-long-arrow-up':isAsc}"></span></a>
+                </li>  
               </ul>
             </div>
           </div>
-          <div class="goods-list">
+          <div class="goods-list">  
             <ul class="yui3-g">
               <li
                 class="yui3-u-1-5"
@@ -101,50 +90,24 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+            <Pagination/>
         </div>
       </div>
     </div>
-  </div>
+  </div>  
 </template>
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 
 import { mapGetters } from "vuex";
+import Pagination from '@/components/Pagination';
 export default {
   name: "Search",
 
   components: {
     SearchSelector,
+  
   },
   data() {
     return {
@@ -155,7 +118,7 @@ export default {
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "", //排序
+        order: "1:desc", //排序
         pageNo: 1,
         pageSize: 3,
         props: [], // 售卖属性
@@ -172,6 +135,15 @@ export default {
     //   //goodsList: (state) => state.search.searchList.goodsList,   //此写法太长，应该搭配gatte
     // }),
     ...mapGetters(["goodsList"]),
+    isOne(){   //判断是否为综合排序
+      return this.searchParams.order.indexOf('1')!=-1
+    },
+    isAsc(){    //是否升序
+      return this.searchParams.order.indexOf('asc')!=-1
+    },
+    isDesc(){    //是否降序
+      return this.searchParams.order.indexOf('desc')!=-1
+    }
   },
   methods: {
     //写在这可以重复调用发送
@@ -236,6 +208,23 @@ export default {
     removeAttr(index){
       this.searchParams.props.splice(index,1);
            this.getData();  //重新获取数据
+
+    },
+    changeOrder(flag){   //按钮传值形参，代表点了综合还是价格排序
+    let  originOrder = this.searchParams.order;
+    let originFlag = this.searchParams.order.split(":")[0];
+    let originSort = this.searchParams.order.split(":")[1];
+
+    let newOrder='';
+     
+     if(flag==originFlag){
+        newOrder=`${originFlag}:${originSort=="desc"?"asc":"desc"}`;
+     }else{
+        newOrder=`${flag}:${'desc'}`
+     }
+
+     this.searchParams.order=newOrder;   //修改参数
+     this.getData();  //重新获取数据
 
     }
   },
