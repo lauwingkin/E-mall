@@ -54,9 +54,10 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <router-link :to="`/detail/${good.id}`">
+                    <!-- 路由跳转传参 -->
                       <img :src="good.defaultImg" />
-                    </a>
+                     </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -90,7 +91,9 @@
               </li>
             </ul>
           </div>
-            <Pagination/>
+            <!-- 分页器 -->
+            <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"/>
+          <!-- 自定义事件 -->
         </div>
       </div>
     </div>
@@ -100,8 +103,8 @@
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 
-import { mapGetters } from "vuex";
-import Pagination from '@/components/Pagination';
+import { mapGetters,mapState } from "vuex";
+//import Pagination from '@/components/Pagination';
 export default {
   name: "Search",
 
@@ -120,7 +123,7 @@ export default {
         keyword: "",
         order: "1:desc", //排序
         pageNo: 1,
-        pageSize: 3,
+        pageSize:3,
         props: [], // 售卖属性
         trademark: "",
       },
@@ -143,7 +146,10 @@ export default {
     },
     isDesc(){    //是否降序
       return this.searchParams.order.indexOf('desc')!=-1
-    }
+    },
+    ...mapState({
+         total:state=>state.search.searchList.total 
+    })
   },
   methods: {
     //写在这可以重复调用发送
@@ -226,6 +232,12 @@ export default {
      this.searchParams.order=newOrder;   //修改参数
      this.getData();  //重新获取数据
 
+    },
+    getPageNo(pageNo){    //向子组件当前获取按第几页
+      console.log("当前页"+pageNo)
+      this.searchParams.pageNo=pageNo;
+      
+      this.getData();  //重新获取数据 
     }
   },
   beforeMount() {  
