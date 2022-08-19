@@ -31,7 +31,7 @@ export default  new VueRouter({  //路由规则
             meta:{show:false},
         },
         {
-            path:'/detail/:skuid',  //占位符
+            path:'/detail/:skuId',  //占位符
             component:Detail,
             meta:{show:true},
         },
