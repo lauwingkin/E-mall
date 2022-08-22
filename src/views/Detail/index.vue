@@ -75,12 +75,13 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt">
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"   />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>    
+                <!-- 购买个数操作 -->
+                <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:skuNum=1">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a @click="addCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -337,6 +338,11 @@
 
   export default {
     name: 'Detail',
+    data(){
+      return{
+        skuNum:1 
+      }
+    },
     
     components: {
       ImageList,
@@ -354,11 +360,43 @@
       }
     },
     methods: {
-      changeActive(saleAttrValue,arr){
+      changeActive(saleAttrValue,arr){   //售卖属性值高亮
         arr.forEach(item=>{
           item.isChecked=0;
         })
         saleAttrValue.isChecked=1;
+
+      },
+      changeSkuNum(event){   //event获取元素
+        let value=event.target.value*1;
+        //如果输入非法
+        if(isNaN(value)||value<1){   //剔除非数字和小数
+          this.skuNum=1;
+        }else{
+          this.skuNum=parseInt(value);  //小数取整
+        }
+      },
+      //加入购物车
+      async addCart(){
+        //1.发请求给服务器
+        // await 异步等待成功
+       try{ 
+         await this.$store.dispatch('addOrUpdateShopCart',{
+          skuId:this.$route.params.skuId,
+          skuNum:this.skuNum
+          })//得到返回值promise
+        //通过async返回值判断成功还是失败
+        //如果成功，进行操作
+        //路由跳转,并把产品信息往下传 
+        sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo));   //转字符串后，存进会话存储
+        this.$router.push({name:'addCartSuccess',query:{skuNum:this.skuNum}});
+
+       }catch(error){ //失败
+          alert(error.message);
+       }
+
+
+
 
       }
     }

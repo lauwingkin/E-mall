@@ -3,6 +3,8 @@ import nprogress from 'nprogress';
 
 import "nprogress/nprogress.css";
 
+import store from '@/store'   //引入仓库数据
+
 const requests = axios.create({
     baseURL:"/api",
     timeout:5000,
@@ -12,6 +14,11 @@ const requests = axios.create({
 
 //请求拦截器
 requests.interceptors.request.use(config=>{
+    if(store.state.detail.uuid_token){   //读取判断
+        config.headers.userTempId = store.state.detail.uuid_token
+    }
+
+
         //开启进度条
      nprogress.start();
     return config;   //配置对象，里面的headers很重要

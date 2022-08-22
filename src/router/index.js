@@ -6,6 +6,8 @@ import Register from '@/views/Register/Register'
 import Search  from '@/views/Search/index.vue'
 import Login from '@/views/Login/Login'
 import Detail from  '@/views/Detail'
+import AddCartSuccess from '@/views/AddCartSuccess'
+import ShopCart from '@/views/ShopCart'
 
 export default  new VueRouter({  //路由规则
     routes:[
@@ -34,6 +36,22 @@ export default  new VueRouter({  //路由规则
             path:'/detail/:skuId',  //占位符
             component:Detail,
             meta:{show:true},
+        },
+        {
+            //购物车成功
+            path:'/addcartsuccess',
+            component:AddCartSuccess,
+            name:"addCartSuccess",
+            meta:{show:true},
+
+        },
+        {
+            //购物车
+            path:'/shopcart',
+            component:ShopCart,
+            name:"shopCart",
+            meta:{show:true},
+
         },
         //重定向，默认进入home页面
         {

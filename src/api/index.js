@@ -30,7 +30,32 @@ export const reqGetSearchInfo = (params) => requests({
     data: params
    });  
 
-   export const reqGoodsInfo = (skuId) => requests({
+//获取产品详情接口
+export const reqGoodsInfo = (skuId) => requests({
     url: `/item/${skuId}`, 
+    method: 'GET'
+   }); 
+   
+//产品添加到购物车
+export const reqAddOrUpdateShopCart=(skuId,skuNum)=>requests({
+    url:`/cart/addToCart/${skuId}/${skuNum}`,
+    method:'POST',
+})
+
+//获取购物车
+export const reqCartList = () => requests({
+    url: "/cart/cartList", 
+    method: 'GET'
+   }); 
+   
+ //删除购物车
+export const reqDeleteCartById = (skuId) => requests({
+    url: `/cart/deleteCart/${skuId}`, 
+    method: 'DELETE'
+   });   
+
+   
+export const reqUpdateCheckCartById = (skuId,isChecked) => requests({
+    url: `/cart/checkCart/${skuId}/${isChecked}`, 
     method: 'GET'
    });  

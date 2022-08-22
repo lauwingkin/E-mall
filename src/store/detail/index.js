@@ -3,7 +3,8 @@ import Vue from 'vue'
 //引入Vuex
 import Vuex from 'vuex'
 
-import { reqGoodsInfo } from "@/api/index.js"
+import { reqGoodsInfo,reqAddOrUpdateShopCart } from "@/api/index.js"
+import {getUUID}   from "@/utils/uuid_token.js"
 //应用Vuex插件
 Vue.use(Vuex)
 
@@ -17,7 +18,23 @@ const actions = {
             commit('GETGOODINFO', result.data)
             console.log(result);
         }
+    },
+    async addOrUpdateShopCart({ commit }, {skuId,skuNum}) {
+        console.log("send"+{skuId,skuNum});
+        let result = await reqAddOrUpdateShopCart(skuId,skuNum)
+        if (result.code == 200) {
+               //没有返回数据，无需三连环
+            console.log(result);  //只有一个成功与失败的结果，没有数据
+          //返回成功   
+            return "ok"
+        }else{
+            //返回失败
+            return Promise.reject(new Error('faile'));
+        }
+         
+
     }
+ 
 };
 //准备mutations对象——修改state中的数据
 const mutations = {
@@ -29,6 +46,7 @@ const mutations = {
 //准备state对象——保存具体的数据
 const state = {
     goodInfo: {},
+    uuid_token:getUUID()
 }
 //理解为计算属性，用于简化仓库数据，让组件获取仓库数据更方便
 //数据层级太多，用getter简化
