@@ -14,8 +14,14 @@ const requests = axios.create({
 
 //请求拦截器
 requests.interceptors.request.use(config=>{
-    if(store.state.detail.uuid_token){   //读取判断
+
+    if(store.state.detail.uuid_token){   //uuid读取判断
         config.headers.userTempId = store.state.detail.uuid_token
+    }
+
+    if(store.state.user.token){   //token读取判断
+        config.headers.token = store.state.user.token
+        console.log("已通过请求头发送本地存储的token")
     }
 
 

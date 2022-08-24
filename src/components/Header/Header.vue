@@ -5,10 +5,15 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userName">
             <span>请</span>
             <router-link to='/login'>登陆</router-link>
             <router-link class="register" to='/register'>免费注册</router-link>
+          </p>
+          <!-- 登陆了 -->
+          <p v-else>
+            <a>{{userName}}</a>
+            <a class="register" @click="logOut">退出登陆</a>
           </p>
         </div>
         <div class="typeList">
@@ -53,7 +58,8 @@ export default {
   name: "Header",
   data(){
     return{
-      keyword:''
+      keyword:'',
+      //userName:'',
     }
   },
   methods: { 
@@ -77,6 +83,18 @@ export default {
           this.$router.push(location) ;
        }
 
+    },
+    async logOut(){
+      //发登出请求，清除localStorage，token，userInfo
+      try{
+         await this.$store.dispatch("userLogOut");
+         //如果成功，退出到首页
+         this.$router.push("/home");
+         
+        }catch(error){
+
+        }
+
     }
 
     
@@ -85,6 +103,12 @@ export default {
     this.$bus.$on('clear',()=>{
       this.keyword="";   //清空输入框
     })
+  },
+  computed:{
+    //用户名信息
+    userName(){
+      return this.$store.state.user.userInfo.name
+    }
   }
 };
 

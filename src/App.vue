@@ -21,6 +21,8 @@ export default {
     //通知VueX 发请求，获取数据，存储在state仓库中
     this.$store.dispatch("categoryList", "categoryList");
     //只挂载一次，用于过去列表数据
+
+
   }
 }
 </script>

@@ -59,3 +59,36 @@ export const reqUpdateCheckCartById = (skuId,isChecked) => requests({
     url: `/cart/checkCart/${skuId}/${isChecked}`, 
     method: 'GET'
    });  
+
+ //获取验证码  
+export const reqGetCode= (phone) => requests({
+    url: `/user/passport/sendCode/${phone}`, 
+    method: 'GET'
+   });   
+   
+//注册
+export const reqUserRegister=(data)=>requests({
+    url:`/user/passport/register`,
+    data:data,    //传对象用body方式，不用query
+    method:'POST',
+})
+
+//登陆
+export const reqUserLogin=(data)=>requests({
+    url:`/user/passport/login`,
+    data:data,    //传对象用body方式，不用query
+    method:'POST',
+})
+
+//用token获取信息,用请求头传参
+export const reqUserInfo= () => requests({
+    url: `/user/passport/auth/getUserInfo`, 
+    method: 'GET'
+   });   
+
+
+//退出登陆
+export const reqLogOut= () => requests({
+    url: `/user/passport/logout`, 
+    method: 'GET'
+   });   

@@ -33,6 +33,9 @@ export default {
     },
     mounted() {
     this.$store.dispatch("getFloorList");
+    
+    this.$store.dispatch("getUserInfo");  //通过token获取用户信息
+    
   },
     computed: {
     ...mapState({
