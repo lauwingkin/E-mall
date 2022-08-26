@@ -134,7 +134,7 @@ export default {
         showCancelButton: true, //是否显示取消按钮
         confirmButtonText: "已完成支付", //确认按钮文本内容
         beforeClose: (type, instance, done) => {
-          if ((type = "cancel")) {
+          if (type == "cancel") {
             //按了取消
             alert("请联络客服");
             //清除定时器
