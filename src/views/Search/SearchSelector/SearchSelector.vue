@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'VueX'
+import { mapGetters } from 'vuex'
   export default {
     name: 'SearchSelector',
     computed:{

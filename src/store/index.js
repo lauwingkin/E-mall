@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueX from 'VueX'
+import VueX from 'vuex'
 
 
 Vue.use(VueX);
@@ -10,6 +10,7 @@ import search from './search'
 import detail from './detail'
 import shopCart from './shopCart';
 import user from './user';
+import trade from './trade'
 
 //创建并暴露store
 export default new VueX.Store({
@@ -20,5 +21,6 @@ export default new VueX.Store({
         detail,
         shopCart,
         user,  
+        trade
     }  
 })

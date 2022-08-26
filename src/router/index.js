@@ -8,6 +8,9 @@ import Login from '@/views/Login'
 import Detail from '@/views/Detail'
 import AddCartSuccess from '@/views/AddCartSuccess'
 import ShopCart from '@/views/ShopCart'
+import Trade from '@/views/Trade'
+import Pay from '@/views/Pay'
+import PaySuccess from '@/views/PaySuccess'
 
 import store from "@/store"  //引入仓库
 
@@ -45,7 +48,6 @@ let router = new VueRouter({  //路由规则
             component: AddCartSuccess,
             name: "addCartSuccess",
             meta: { show: true },
-
         },
         {
             //购物车
@@ -53,13 +55,36 @@ let router = new VueRouter({  //路由规则
             component: ShopCart,
             name: "shopCart",
             meta: { show: true },
-
         },
+        {
+            //交易订单
+            path: '/trade',
+            component: Trade,
+            name: "trade",
+            meta: { show: true }
+        },
+        {
+            //支付
+                path: '/pay',
+                component: Pay,
+                name: "pay",
+                meta: { show: true },
+    
+            },
+            {
+                //支付成功
+                    path: '/paysuccess',
+                    component: PaySuccess,
+                    name: "paysuccess",
+                    meta: { show: true },
+        
+                },
         //重定向，默认进入home页面
         {
             path: '*',
             redirect: '/home'
-        }
+        },
+
     ],
     //路由跳转后，轮动位置
     scrollBehavior(to, from, savedPosition) {
