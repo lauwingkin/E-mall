@@ -9,7 +9,7 @@
       <div class="paydetail">
         <p class="button">
           <router-link class="btn-look" to="/center">查看订单</router-link>
-          <router-link class="btn-goshop" to="/">继续购物</router-link>
+          <router-link class="btn-goshop" to="/home">继续购物</router-link>
         </p>
       </div>
     </div>
@@ -20,6 +20,14 @@
 <script>
   export default {
     name: 'PaySuccess',
+    //组件内守卫
+    beforeRouteEnter(to,from,next){
+        if(from.path=='/pay'){
+              next();
+        }else{
+          next(false);
+        }
+    }
   }
 </script>
 

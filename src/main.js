@@ -10,6 +10,9 @@ import TypeNav from '@/components/TypeNav/TypeNav.vue'
 import Pagination from '@/components/Pagination'
 import { MessageBox } from 'element-ui';
 
+import VueLazyload from 'vue-lazyload'
+import imgTest from '@/assets/logo.png'
+
 //第一个参数，全局组件名字（这里直接读取了name值），第二个参数，哪个一个组件
 Vue.component(TypeNav.name, TypeNav);
 Vue.component(Pagination.name, Pagination);
@@ -23,6 +26,11 @@ Vue.config.productionTip = false
 
 
 Vue.use(VueRouter)
+
+Vue.use(VueLazyload,{
+  //配置默认图
+  loading:imgTest
+})
 
 
 //Vue.component(Button.name, Button);
